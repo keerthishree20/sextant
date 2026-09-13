@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sextant-ann"
+version = "1.0.0"
+description = "An HNSW vector index with the graph written from scratch."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-timeout>=2.3"]
+# Only for bench/public.py, which reads the ann-benchmarks HDF5 files.
+bench = ["h5py>=3"]
+
+[project.scripts]
+sextant = "sextant.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sextant*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --timeout=600"

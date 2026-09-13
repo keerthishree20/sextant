@@ -1,0 +1,28 @@
+name: tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install
+        run: pip install -r requirements-dev.txt
+
+      # The recall tests build real graphs, so this is not a fast suite. It is
+      # also the only thing that can catch a graph that quietly stops being
+      # navigable, so it runs on every push rather than nightly.
+      - name: Test
+        run: python -m pytest -q
